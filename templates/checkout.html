@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+  <h2>Checkout</h2>
+  {% if items %}
+    <h3>Преглед на поръчката</h3>
+    <ul>
+      {% for it in items %}
+        <li>{{ it.product.name }} x {{ it.qty }} = {{ it.subtotal }} лв</li>
+      {% endfor %}
+    </ul>
+    <p>Общо: {{ total }} лв</p>
 
-</body>
-</html>
+    <form method="post">
+      <label>Адрес за доставка</label><br>
+      <textarea name="address" required></textarea><br>
+      <label>Начин на плащане</label><br>
+      <select name="payment" required>
+        <option value="cash">Наложен платеж</option>
+        <option value="card">Кредитна/Дебитна карта</option>
+      </select><br>
+      <button type="submit">Потвърди поръчката</button>
+    </form>
+  {% else %}
+    <p>Кошницата е празна.</p>
+  {% endif %}
+{% endblock %}

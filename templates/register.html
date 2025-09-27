@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+  <h2>Регистрация</h2>
+  <form method="post">
+    <label>Имейл</label><br>
+    <input type="email" name="email" required><br>
+    <label>Парола</label><br>
+    <input type="password" name="password" required><br>
+    <button type="submit">Регистрация</button>
+  </form>
+{% endblock %}

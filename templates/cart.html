@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+  <h2>Кошница</h2>
+  {% if items %}
+    <table>
+      <thead><tr><th>Продукт</th><th>Кол.</th><th>Цена</th><th>Сума</th></tr></thead>
+      <tbody>
+        {% for it in items %}
+          <tr>
+            <td>{{ it.product.name }}</td>
+            <td>{{ it.qty }}</td>
+            <td>{{ it.product.price }} лв</td>
+            <td>{{ it.subtotal }} лв</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p>Общо: {{ total }} лв</p>
+    <p><a class="btn" href="{{ url_for('cart.checkout') }}">Плати и финализирай поръчката</a></p>
+  {% else %}
+    <p>Кошницата е празна.</p>
+  {% endif %}
+{% endblock %}

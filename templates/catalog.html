@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
+  <h2>Каталог</h2>
 
-</body>
-</html>
+  <form method="get" action="{{ url_for('catalog.catalog') }}" class="filter-form">
+    <input type="text" name="q" placeholder="Търсене (име или цвят)" value="{{ request.args.get('q','') }}">
+    <input type="text" name="color" placeholder="Цвят" value="{{ request.args.get('color','') }}">
+    <input type="text" name="size" placeholder="Размер (напр. 42)" value="{{ request.args.get('size','') }}">
+    <input type="text" name="price_min" placeholder="Мин. цена" value="{{ request.args.get('price_min','') }}">
+    <input type="text" name="price_max" placeholder="Макс. цена" value="{{ request.args.get('price_max','') }}">
+    <button type="submit">Филтрирай</button>
+  </form>
+
+  <div class="products">
+    {% for p in products %}
+      <div class="product">
+        <img src="https://via.placeholder.com/300x200?text={{ p.name }}" alt="{{ p.name }}">
+        <h3>{{ p.name }}</h3>
+        <p class="price">{{ p.price }} лв</p>
+        <p>{{ p.description }}</p>
+        <p><strong>Цвят:</strong> {{ p.color }}</p>
+        <p><strong>Размери:</strong> {{ p.sizes|join(', ') }}</p>
+        <p><strong>Наличност:</strong> {{ p.stock }}</p>
+
+        <form method="post" action="{{ url_for('cart.add_to_cart', product_id=p.id) }}">
+          <input type="number" name="qty" value="1" min="1" max="{{ p.stock }}">
+          <button type="submit">Добави в кошницата</button>
+        </form>
+      </div>
+    {% else %}
+      <p>Няма продукти.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

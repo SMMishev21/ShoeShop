@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+  <h2>Добре дошли в ShoeStore</h2>
+  <p>Примерен проект за учебни цели. Можете да разглеждате каталога или да влезете.</p>
+  <p><a class="btn" href="{{ url_for('catalog.catalog') }}">Към каталога</a></p>
+{% endblock %}
