@@ -1,3 +1,5 @@
+
+
 from services import catalog_service
 
 orders = []
@@ -22,7 +24,7 @@ def create_order(user_id, items, address, payment):
         "status": "new"
     }
     orders.append(order)
-    print(f"[ORDER] Нова поръчка #{order['id']} от user {user_id}")
+    print(f"[ORDER] Нова поръчка от user {user_id}")
     return order
 
 def get_orders_by_user(user_id):

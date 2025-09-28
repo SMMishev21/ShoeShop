@@ -8,13 +8,12 @@
     <input type="text" name="size" placeholder="Размер (напр. 42)" value="{{ request.args.get('size','') }}">
     <input type="text" name="price_min" placeholder="Мин. цена" value="{{ request.args.get('price_min','') }}">
     <input type="text" name="price_max" placeholder="Макс. цена" value="{{ request.args.get('price_max','') }}">
-    <button type="submit">Филтрирай</button>
+
   </form>
 
   <div class="products">
     {% for p in products %}
       <div class="product">
-        <img src="https://via.placeholder.com/300x200?text={{ p.name }}" alt="{{ p.name }}">
         <h3>{{ p.name }}</h3>
         <p class="price">{{ p.price }} лв</p>
         <p>{{ p.description }}</p>
