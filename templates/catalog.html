@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Каталог</h2>
+
 
   <form method="get" action="{{ url_for('catalog.catalog') }}" class="filter-form">
+    <h2>Каталог</h2>
     <input type="text" name="q" placeholder="Търсене (име или цвят)" value="{{ request.args.get('q','') }}">
     <input type="text" name="color" placeholder="Цвят" value="{{ request.args.get('color','') }}">
     <input type="text" name="size" placeholder="Размер (напр. 42)" value="{{ request.args.get('size','') }}">
     <input type="text" name="price_min" placeholder="Мин. цена" value="{{ request.args.get('price_min','') }}">
     <input type="text" name="price_max" placeholder="Макс. цена" value="{{ request.args.get('price_max','') }}">
-
+    <button type="submit">Филтрирай</button>
   </form>
 
   <div class="products">

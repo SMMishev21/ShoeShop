@@ -9,8 +9,8 @@ body {
 
 /* --- Header --- */
 header {
-  background: linear-gradient(90deg, #2980b9, #6dd5fa);
-  color: #fff;
+  background: #ffffff;
+  color: #2c3e50;
   padding: 16px 32px;
   display: flex;
   justify-content: space-between;
@@ -18,24 +18,27 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 header h1 a {
-  color: #fff;
+  color: #2c3e50;
   font-size: 1.6rem;
   font-weight: bold;
+  text-decoration: none;
 }
 
 nav a {
   margin-left: 20px;
   padding: 8px 14px;
   border-radius: 20px;
-  color: #fff;
-  transition: background 0.3s;
+  color: #2c3e50;
+  text-decoration: none; /* Махаме подчертаването */
+  transition: background 0.3s, color 0.3s;
 }
 nav a:hover {
-  background: rgba(255,255,255,0.2);
+  background: #f0f0f0;
+  color: #2980b9;
 }
 
 /* --- Основна част --- */
@@ -44,6 +47,32 @@ main {
   max-width: 1200px;
   margin: 20px auto;
 }
+
+/* --- Home Page --- */
+.home {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.home h2 {
+  font-size: 4rem;   /* по-голямо заглавие */
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+.home .btn {
+  font-size: 2rem;   /* по-голям бутон */
+  padding: 14px 28px;
+  margin-bottom: 190px; /* повече вътрешен отстъп */
+  border-radius: 30px;
+}
+
+
 
 /* --- Flash messages --- */
 .flash {
@@ -97,13 +126,15 @@ button, .btn {
   display: inline-block;
   background: linear-gradient(90deg, #3498db, #2ecc71);
   color: #fff;
-  padding: 10px 18px;
+  padding: 12px 22px;
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 1rem;
   transition: transform 0.2s, background 0.3s;
+  text-decoration: none; /* за <a class="btn"> */
 }
+
 button:hover, .btn:hover {
   transform: scale(1.05);
   background: linear-gradient(90deg, #2980b9, #27ae60);
@@ -155,15 +186,4 @@ table th {
 }
 table tr:nth-child(even) {
   background: #f9f9f9;
-}
-
-/* --- Footer --- */
-footer {
-  text-align: center;
-  padding: 16px;
-  margin-top: 40px;
-  background: #2c3e50;
-  color: #ecf0f1;
-  font-size: 0.9rem;
-  border-top: 4px solid #3498db;
 }
