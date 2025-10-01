@@ -87,5 +87,4 @@ def delete_product(product_id):
     products = [p for p in products if p["id"] != product_id]
     return True
 
-
 _seed()

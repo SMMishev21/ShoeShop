@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-
+  <!-- Форма за филтриране и търсене -->
   <form method="get" action="{{ url_for('catalog.catalog') }}" class="filter-form">
     <h2>Каталог</h2>
     <input type="text" name="q" placeholder="Търсене (име или цвят)" value="{{ request.args.get('q','') }}">
@@ -12,6 +12,7 @@
     <button type="submit">Филтрирай</button>
   </form>
 
+  <!-- Продукти -->
   <div class="products">
     {% for p in products %}
       <div class="product">
@@ -22,6 +23,7 @@
         <p><strong>Размери:</strong> {{ p.sizes|join(', ') }}</p>
         <p><strong>Наличност:</strong> {{ p.stock }}</p>
 
+        <!-- Форма за добавяне в количката -->
         <form method="post" action="{{ url_for('cart.add_to_cart', product_id=p.id) }}">
           <input type="number" name="qty" value="1" min="1" max="{{ p.stock }}">
           <button type="submit">Добави в кошницата</button>
@@ -31,4 +33,5 @@
       <p>Няма продукти.</p>
     {% endfor %}
   </div>
+
 {% endblock %}

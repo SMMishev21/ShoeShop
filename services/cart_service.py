@@ -1,14 +1,15 @@
 carts = {}
 
-def add_to_cart(user_id, product_id, quality=1):
+def add_to_cart(user_id, product_id, qty=1):
+
     if user_id not in carts:
         carts[user_id] = []
 
     for it in carts[user_id]:
         if it["product_id"] == product_id:
-            it["quality"] += quality
+            it["qty"] += qty  # поправено: вече се използва 'qty', а не 'quality'
             return
-    carts[user_id].append({"product_id": product_id, "qty": quality})
+    carts[user_id].append({"product_id": product_id, "qty": qty})
 
 def get_cart(user_id):
     return carts.get(user_id, [])

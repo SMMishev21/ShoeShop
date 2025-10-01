@@ -1,4 +1,3 @@
-
 from services import catalog_service
 
 orders = []
