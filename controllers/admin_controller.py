@@ -27,14 +27,15 @@ def add_product():
         sizes_raw = request.form.get("sizes", "").strip()  # пример: "40,41,42"
         price = float(request.form.get("price", 0))
         stock = int(request.form.get("stock", 0))
+        image_url = request.form.get("image_url", "").strip()
 
         sizes = [int(s.strip()) for s in sizes_raw.split(",") if s.strip()]
 
-        catalog_service.add_product(name, description, color, sizes, price, stock)
+        catalog_service.add_product(name, description, color, sizes, price, stock, image_url)
         flash("Продуктът е добавен.", "success")
         return redirect(url_for("admin.products"))
 
-    return render_template("admin_add_products.html")
+    return render_template("admin_add_product.html")
 
 @admin_bp.route("/admin/edit_product/<int:product_id>", methods=["GET", "POST"])
 def edit_product(product_id):
@@ -54,7 +55,8 @@ def edit_product(product_id):
             "color": request.form.get("color", product["color"]).strip(),
             "sizes": [int(s.strip()) for s in request.form.get("sizes", ",".join(map(str,product["sizes"]))).split(",") if s.strip()],
             "price": float(request.form.get("price", product["price"])),
-            "stock": int(request.form.get("stock", product["stock"]))
+            "stock": int(request.form.get("stock", product["stock"])),
+            "image_url": request.form.get("image_url", product.get("image_url"))
         }
         catalog_service.edit_product(product_id, data)
         flash("Продуктът е обновен.", "success")

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Редактирай продукт</h2>
-  <form method="post">
+<h2>Редактирай продукт</h2>
+<form method="post">
     <label>Име</label><br><input name="name" value="{{ product.name }}"><br>
     <label>Описание</label><br><textarea name="description">{{ product.description }}</textarea><br>
     <label>Цвят</label><br><input name="color" value="{{ product.color }}"><br>
-    <label>Размери (разделени с запетаи)</label><br>
-    <input name="sizes" value="{{ product.sizes|join(',') }}"><br>
+    <label>Размери (разделени с запетаи)</label><br><input name="sizes" value="{{ product.sizes|join(',') }}"><br>
     <label>Цена</label><br><input name="price" value="{{ product.price }}" type="number" step="0.01"><br>
     <label>Наличност</label><br><input name="stock" value="{{ product.stock }}" type="number"><br>
+    <label>Снимка (URL)</label><br><input name="image_url" value="{{ product.image_url }}"><br>
     <button type="submit">Запази</button>
-  </form>
+</form>
 {% endblock %}
