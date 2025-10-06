@@ -3,12 +3,17 @@ from controllers.auth_controller import auth_bp
 from controllers.catalog_controller import catalog_bp
 from controllers.cart_controller import cart_bp
 from controllers.admin_controller import admin_bp
+from database import init_db
+
 
 def create_app():
     app = Flask(__name__)
     app.secret_key = "ShoeShop"
 
+    # Initialize database
+    init_db(app)
 
+    # Register blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(catalog_bp)
     app.register_blueprint(cart_bp)
@@ -19,6 +24,7 @@ def create_app():
         return render_template("index.html")
 
     return app
+
 
 if __name__ == "__main__":
     app = create_app()
