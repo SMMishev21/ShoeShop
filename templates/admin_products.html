@@ -1,23 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Admin: Продукти</h2>
-  <p><a href="{{ url_for('admin.add_product') }}">Добави продукт</a></p>
+<div class="admin-container">
+  <h2>Admin: Управление на продукти</h2>
 
-  <table>
-    <thead><tr><th>ID</th><th>Име</th><th>Цена</th><th>Наличност</th><th>Действия</th></tr></thead>
-    <tbody>
-      {% for p in products %}
+  <div class="admin-actions">
+    <a href="{{ url_for('admin.add_product') }}" class="btn">➕ Добави нов продукт</a>
+    <a href="{{ url_for('admin.profile_approvals') }}" class="btn">👥 Одобрения на снимки</a>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
         <tr>
-          <td>{{ p.id }}</td>
-          <td>{{ p.name }}</td>
-          <td>{{ p.price }} лв</td>
-          <td>{{ p.stock }}</td>
-          <td>
-            <a href="{{ url_for('admin.edit_product', product_id=p.id) }}">Редактирай</a> |
-            <a href="{{ url_for('admin.delete_product', product_id=p.id) }}">Изтрий</a>
-          </td>
+          <th>ID</th>
+          <th>Име</th>
+          <th>Цена</th>
+          <th>Наличност</th>
+          <th>Действия</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for p in products %}
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ "%.2f"|format(p.price) }} лв</td>
+            <td>{{ p.stock }}</td>
+            <td class="actions">
+              <a href="{{ url_for('admin.edit_product', product_id=p.id) }}" class="btn-edit">✏️ Редактирай</a>
+              <a href="{{ url_for('admin.delete_product', product_id=p.id) }}" class="btn-delete" onclick="return confirm('Сигурни ли сте, че искате да изтриете този продукт?')">🗑️ Изтрий</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

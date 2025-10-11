@@ -1,26 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Checkout</h2>
-  {% if items %}
-    <h3>Преглед на поръчката</h3>
-    <ul>
-      {% for it in items %}
-        <li>{{ it.product.name }} x {{ it.qty }} = {{ it.subtotal }} лв</li>
-      {% endfor %}
-    </ul>
-    <p>Общо: {{ total }} лв</p>
+<div class="checkout-container">
+  <h2>📋 Финализиране на поръчката</h2>
 
-    <form method="post">
-      <label>Адрес за доставка</label><br>
-      <textarea name="address" required></textarea><br>
-      <label>Начин на плащане</label><br>
-      <select name="payment" required>
-        <option value="cash">Наложен платеж</option>
-        <option value="card">Кредитна/Дебитна карта</option>
-      </select><br>
-      <button type="submit">Потвърди поръчката</button>
+  {% if items %}
+    <div class="order-summary">
+      <h3>Преглед на поръчката</h3>
+      <div class="order-items">
+        {% for it in items %}
+          <div class="order-item">
+            <span class="item-name">{{ it.product.name }}</span>
+            <span class="item-qty">x {{ it.qty }}</span>
+            <span class="item-subtotal">{{ "%.2f"|format(it.subtotal) }} лв</span>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="order-total">
+        <strong>Общо: {{ "%.2f"|format(total) }} лв</strong>
+      </div>
+    </div>
+
+    <form method="post" class="checkout-form">
+      <div class="form-group">
+        <label>Адрес за доставка</label>
+        <textarea name="address" required placeholder="Въведете пълен адрес за доставка..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Начин на плащане</label>
+        <select name="payment" required>
+          <option value="">Изберете начин на плащане</option>
+          <option value="cash">Наложен платеж</option>
+          <option value="card">Кредитна/Дебитна карта</option>
+          <option value="bank">Банков превод</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">✅ Потвърди поръчката</button>
     </form>
+
+    <div class="back-to-cart">
+      <a href="{{ url_for('cart.cart') }}" class="btn btn-secondary">← Назад към кошницата</a>
+    </div>
   {% else %}
-    <p>Кошницата е празна.</p>
+    <div class="empty-checkout">
+      <p>Кошницата е празна.</p>
+      <a href="{{ url_for('catalog.catalog') }}" class="btn">Към каталога</a>
+    </div>
   {% endif %}
+</div>
 {% endblock %}

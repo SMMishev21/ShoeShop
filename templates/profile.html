@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моят профил - ShoeShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .profile-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .profile-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .profile-image-section {
+            text-align: center;
+        }
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+        .profile-image.placeholder {
+            background: #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            color: #95a5a6;
+            margin: 0 auto 20px;
+        }
+        .upload-form input[type="file"] {
+            display: none;
+        }
+        .upload-btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .upload-btn:hover {
+            background: #2980b9;
+        }
+        .approval-status {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .status-pending {
+            background: #f39c12;
+            color: white;
+        }
+        .status-approved {
+            background: #2ecc71;
+            color: white;
+        }
+        .profile-info h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .info-row {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #7f8c8d;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .change-password-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+        }
+        .change-password-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            background: #2ecc71;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background: #27ae60;
+        }
+        .orders-section {
+            margin-top: 40px;
+        }
+        .order-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .order-id {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .order-status {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .status-new {
+            background: #3498db;
+            color: white;
+        }
+        .status-processing {
+            background: #f39c12;
+            color: white;
+        }
+        .status-completed {
+            background: #2ecc71;
+            color: white;
+        }
+        .order-items {
+            margin: 15px 0;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .order-total {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: right;
+            margin-top: 15px;
+        }
+        .download-pdf-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .download-pdf-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Моят профил</h1>
+
+        <div class="profile-grid">
+            <!-- Profile Image Section -->
+            <div class="profile-card profile-image-section">
+                {% if user.profile_image and user.profile_image_approved %}
+                    <img src="{{ user.profile_image }}" alt="Profile" class="profile-image">
+                {% else %}
+                    <div class="profile-image placeholder">👤</div>
+                {% endif %}
+
+                {% if user.profile_image and not user.profile_image_approved %}
+                    <div class="approval-status status-pending">
+                        ⏳ Чака одобрение
+                    </div>
+                {% elif user.profile_image and user.profile_image_approved %}
+                    <div class="approval-status status-approved">
+                        ✓ Одобрена
+                    </div>
+                {% endif %}
+
+                <form action="{{ url_for('profile.upload_image') }}" method="POST" enctype="multipart/form-data" class="upload-form">
+                    <label for="profileImageInput" class="upload-btn">
+                        📷 Качи нова снимка
+                    </label>
+                    <input type="file" name="profile_image" id="profileImageInput" accept="image/*" onchange="this.form.submit()">
+                </form>
+
+                <p style="font-size: 12px; color: #7f8c8d; margin-top: 10px;">
+                    Снимката ще бъде одобрена от администратор
+                </p>
+            </div>
+
+            <!-- Profile Info Section -->
+            <div class="profile-card">
+                <h2>Информация за профила</h2>
+
+                <div class="info-row">
+                    <span class="info-label">Имейл:</span>
+                    {{ user.email }}
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Тип акаунт:</span>
+                    {% if user.is_admin %}
+                        <span style="color: #e74c3c; font-weight: bold;">👑 Администратор</span>
+                    {% else %}
+                        Потребител
+                    {% endif %}
+                </div>
+
+                <!-- Change Password -->
+                <div class="change-password-form">
+                    <h3>Смяна на парола</h3>
+                    <form action="{{ url_for('profile.change_password') }}" method="POST">
+                        <input type="password" name="old_password" placeholder="Стара парола" required>
+                        <input type="password" name="new_password" placeholder="Нова парола" required>
+                        <input type="password" name="confirm_password" placeholder="Потвърди нова парола" required>
+                        <button type="submit" class="submit-btn">Смени паролата</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+<div class="orders-section">
+    <h2>Моите поръчки</h2>
+
+    {% if orders %}
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <div class="order-id">Поръчка #{{ order.id }}</div>
+                    <div style="color: #7f8c8d; font-size: 14px; margin-top: 5px;">{{ order.created_at }}</div>
+                </div>
+                <span class="order-status status-{{ order.status }}">{{ order.status|upper }}</span>
+            </div>
+
+            <div><strong>Адрес:</strong> {{ order.address }}</div>
+            <div><strong>Плащане:</strong> {{ order.payment }}</div>
+
+            <div class="order-items">
+                <strong>Продукти:</strong>
+                {% if order.items and order.items is iterable %}
+                    {% for item in order.items %}
+                    <div class="order-item">
+                        <span>{{ item.product_name }} x {{ item.qty }}</span>
+                        <span>{{ item.subtotal|round(2) }} лв</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="order-item">
+                        <span>Информация за продуктите не е налична</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="order-total">
+                Обща сума: {{ order.total_price|round(2) }} лв
+            </div>
+
+            <a href="{{ url_for('profile.download_order_pdf', order_id=order.id) }}" class="download-pdf-btn">
+                📄 Изтегли като PDF
+            </a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Все още нямате направени поръчки.</p>
+        <a href="{{ url_for('catalog.catalog') }}" class="submit-btn">Разгледай продуктите</a>
+    {% endif %}
+</div>
+</body>
+</html>

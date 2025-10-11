@@ -1,45 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 style="color: #667eea; font-size: 2.5rem; margin-bottom: 30px;">🛒 Кошница</h2>
+<div class="cart-container">
+  <h2>🛒 Кошница</h2>
 
-{% if items %}
-<table>
-    <thead>
+  {% if items %}
+  <div class="table-container">
+    <table>
+      <thead>
         <tr>
-            <th>Продукт</th>
-            <th>Количество</th>
-            <th>Цена</th>
-            <th>Сума</th>
+          <th>Продукт</th>
+          <th>Цена за брой</th>
+          <th>Количество</th>
+          <th>Сума</th>
         </tr>
-    </thead>
-    <tbody>
-    {% for it in items %}
-        <tr>
+      </thead>
+      <tbody>
+        {% for it in items %}
+          <tr>
             <td><strong>{{ it.product.name }}</strong></td>
-            <td style="text-align: center;">{{ it.qty }} бр.</td>
             <td>{{ "%.2f"|format(it.product.price) }} лв</td>
+            <td>{{ it.qty }} бр.</td>
             <td><strong>{{ "%.2f"|format(it.subtotal) }} лв</strong></td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-<div class="cart-total">
-    <p>Общо: <strong style="font-size: 2rem;">{{ "%.2f"|format(total) }} лв</strong></p>
-</div>
+  <div class="cart-total">
+    <p>Общо: <strong>{{ "%.2f"|format(total) }} лв</strong></p>
+  </div>
 
-<div style="text-align: center; margin-top: 30px;">
-    <a class="btn" href="{{ url_for('cart.checkout') }}" style="font-size: 1.2rem; padding: 16px 40px;">
-        💳 Плати и финализирай поръчката
-    </a>
-</div>
+  <div class="checkout-actions">
+    <a href="{{ url_for('cart.checkout') }}" class="btn btn-primary">💳 Плати и финализирай поръчката</a>
+    <a href="{{ url_for('catalog.catalog') }}" class="btn btn-secondary">← Продължи пазаруването</a>
+  </div>
 
-{% else %}
-<div style="text-align: center; padding: 80px 20px;">
-    <h3 style="color: #95a5a6; font-size: 2rem; margin-bottom: 20px;">🛍️ Кошницата е празна</h3>
-    <p style="color: #7f8c8d; margin-bottom: 30px;">Добавете продукти от каталога</p>
+  {% else %}
+  <div class="empty-cart">
+    <h3>🛍️ Кошницата е празна</h3>
+    <p>Добавете продукти от каталога</p>
     <a href="{{ url_for('catalog.catalog') }}" class="btn">Към каталога</a>
+  </div>
+  {% endif %}
 </div>
-{% endif %}
-
 {% endblock %}

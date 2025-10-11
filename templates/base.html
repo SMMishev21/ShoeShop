@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <title>ShoeStore</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
 </head>
 <body>
   <header>
@@ -13,6 +12,7 @@
       <a href="{{ url_for('catalog.catalog') }}">Каталог</a>
       <a href="{{ url_for('cart.cart') }}">Кошница</a>
       {% if session.get('user_id') %}
+        <a href="{{ url_for('profile.profile') }}">Профил</a>
         <a href="{{ url_for('auth.logout') }}">Изход</a>
         {% if session.get('is_admin') %}
           <a href="{{ url_for('admin.products') }}">Admin</a>
@@ -37,7 +37,5 @@
 
     {% block content %}{% endblock %}
   </main>
-
-
 </body>
 </html>

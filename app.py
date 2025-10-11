@@ -3,12 +3,17 @@ from controllers.auth_controller import auth_bp
 from controllers.catalog_controller import catalog_bp
 from controllers.cart_controller import cart_bp
 from controllers.admin_controller import admin_bp
+from controllers.product_controller import product_bp
+from controllers.profile_controller import profile_bp
 from database import init_db
 
 
 def create_app():
     app = Flask(__name__)
     app.secret_key = "ShoeShop"
+
+    # Configure upload folder
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
     # Initialize database
     init_db(app)
@@ -18,6 +23,8 @@ def create_app():
     app.register_blueprint(catalog_bp)
     app.register_blueprint(cart_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(product_bp)
+    app.register_blueprint(profile_bp)
 
     @app.route("/")
     def index():

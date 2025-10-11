@@ -10,14 +10,17 @@
     <button type="submit">Филтрирай</button>
 </form>
 
+<!-- In the products grid section of catalog.html -->
 <div class="products">
 {% for p in products %}
     <div class="product">
-        <img src="{{ p.image_url }}" alt="{{ p.name }}" onerror="this.src='https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=400&q=80'">
+        <a href="{{ url_for('product.product_detail', product_id=p.id) }}">
+            <img src="{{ p.image_url }}" alt="{{ p.name }}" onerror="this.src='https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=400&q=80'">
+        </a>
         <div class="product-content">
-            <h3>{{ p.name }}</h3>
+            <h3><a href="{{ url_for('product.product_detail', product_id=p.id) }}" style="text-decoration: none; color: inherit;">{{ p.name }}</a></h3>
             <p class="price">{{ "%.2f"|format(p.price) }} лв</p>
-            <p>{{ p.description }}</p>
+            <p>{{ p.description[:100] }}{% if p.description|length > 100 %}...{% endif %}</p>
             <p><strong>Цвят:</strong> {{ p.color }}</p>
             <p><strong>Размери:</strong> {{ p.sizes|join(', ') }}</p>
             <p><strong>Наличност:</strong> {{ p.stock }} бр.</p>
@@ -25,6 +28,9 @@
                 <input type="number" name="qty" value="1" min="1" max="{{ p.stock }}">
                 <button type="submit">🛒 Добави</button>
             </form>
+            <div style="margin-top: 10px;">
+                <a href="{{ url_for('product.product_detail', product_id=p.id) }}" class="btn" style="padding: 8px 15px; font-size: 0.9rem;">📖 Виж повече</a>
+            </div>
         </div>
     </div>
 {% else %}

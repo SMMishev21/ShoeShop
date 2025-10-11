@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - ShoeShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .product-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .product-image {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .product-info h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .stars {
+            color: #f39c12;
+            font-size: 24px;
+        }
+        .rating-count {
+            color: #7f8c8d;
+        }
+        .product-price {
+            font-size: 36px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .product-stock {
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .in-stock {
+            background: #2ecc71;
+            color: white;
+        }
+        .out-of-stock {
+            background: #e74c3c;
+            color: white;
+        }
+        .add-to-cart-form {
+            margin: 30px 0;
+        }
+        .add-to-cart-form select, .add-to-cart-form input {
+            padding: 12px;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .add-to-cart-btn {
+            background: #3498db;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .add-to-cart-btn:hover {
+            background: #2980b9;
+        }
+        .reviews-section {
+            margin-top: 60px;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 40px;
+        }
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .rating-summary {
+            background: #ecf0f1;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .rating-summary .big-rating {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .rating-bars {
+            margin: 20px 0;
+        }
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+        }
+        .rating-bar-fill {
+            flex: 1;
+            height: 8px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .rating-bar-fill div {
+            height: 100%;
+            background: #f39c12;
+        }
+        .review-form {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+        .review-form textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .star-rating {
+            font-size: 32px;
+            color: #ddd;
+            cursor: pointer;
+        }
+        .star-rating .star.selected {
+            color: #f39c12;
+        }
+        .review-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .review-author {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .review-date {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .review-stars {
+            color: #f39c12;
+            margin: 10px 0;
+        }
+        .review-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+        }
+        .reply-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .reply-btn:hover {
+            text-decoration: underline;
+        }
+        .reply-form {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            display: none;
+        }
+        .reply-form textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .replies-section {
+            margin-top: 15px;
+            padding-left: 20px;
+            border-left: 3px solid #ecf0f1;
+        }
+        .reply-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .reply-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .reply-author {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        .reply-date {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="product-detail-container">
+        <a href="{{ url_for('catalog.catalog') }}" class="back-link">← Назад към каталога</a>
+
+        <div class="product-main">
+            <div>
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-image">
+            </div>
+
+            <div class="product-info">
+                <h1>{{ product.name }}</h1>
+
+                <div class="product-rating">
+                    <span class="stars">
+                        {% for i in range(5) %}
+                            {% if i < rating_stats.average|round|int %}★{% else %}☆{% endif %}
+                        {% endfor %}
+                    </span>
+                    <span class="rating-count">{{ rating_stats.average|round(1) }} ({{ rating_stats.count }} отзива)</span>
+                </div>
+
+                <p>{{ product.description }}</p>
+
+                <div class="product-price">{{ product.price }} лв</div>
+
+                <p><strong>Цвят:</strong> {{ product.color }}</p>
+                <p><strong>Налични размери:</strong> {{ product.sizes|join(', ') }}</p>
+
+                {% if product.stock > 0 %}
+                    <span class="product-stock in-stock">В наличност: {{ product.stock }} бр.</span>
+
+                    <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST" class="add-to-cart-form">
+                        <label for="size">Размер:</label>
+                        <select name="size" id="size" required>
+                            {% for size in product.sizes %}
+                                <option value="{{ size }}">{{ size }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="qty">Количество:</label>
+                        <input type="number" name="qty" id="qty" value="1" min="1" max="{{ product.stock }}" required>
+
+                        <br>
+                        <button type="submit" class="add-to-cart-btn">Добави в кошницата</button>
+                    </form>
+                {% else %}
+                    <span class="product-stock out-of-stock">Изчерпан</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+<div class="reviews-section">
+    <div class="reviews-header">
+        <h2>Отзиви и коментари</h2>
+    </div>
+
+    {% if rating_stats.count > 0 %}
+    <div class="rating-summary">
+        <div class="big-rating">{{ rating_stats.average|round(1) }} / 5</div>
+        <div class="stars">
+            {% for i in range(5) %}
+                {% if i < rating_stats.average|round|int %}★{% else %}☆{% endif %}
+            {% endfor %}
+        </div>
+        <p>Базирано на {{ rating_stats.count }} отзива</p>
+
+        <div class="rating-bars">
+            {% for star in [5, 4, 3, 2, 1] %}
+            <div class="rating-bar">
+                <span>{{ star }} ★</span>
+                <div class="rating-bar-fill">
+                    <div style="width: {{ (rating_stats.distribution[star] / rating_stats.count * 100) if rating_stats.count > 0 else 0 }}%"></div>
+                </div>
+                <span>{{ rating_stats.distribution[star] }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Review Form -->
+    {% if session.user_id %}
+    <div class="review-form">
+        <h3>{% if user_review %}Редактирай своя отзив{% else %}Напиши отзив{% endif %}</h3>
+        <form action="{{ url_for('product.add_review', product_id=product.id) }}" method="POST">
+            <div class="star-rating" id="starRating">
+                <span class="star" data-rating="1">★</span>
+                <span class="star" data-rating="2">★</span>
+                <span class="star" data-rating="3">★</span>
+                <span class="star" data-rating="4">★</span>
+                <span class="star" data-rating="5">★</span>
+            </div>
+            <input type="hidden" name="rating" id="ratingInput" value="{{ user_review.rating if user_review else 5 }}" required>
+
+            <textarea name="comment" placeholder="Сподели своя опит с този продукт...">{{ user_review.comment if user_review else '' }}</textarea>
+
+            <button type="submit" class="add-to-cart-btn">
+                {% if user_review %}✏️ Обнови отзива{% else %}💬 Публикувай отзив{% endif %}
+            </button>
+        </form>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+        <p>📝 <a href="{{ url_for('auth.login') }}" style="color: #3498db;">Влезте в профила си</a>, за да оставите отзив и коментари.</p>
+    </div>
+    {% endif %}
+
+    <!-- Reviews List -->
+    <h3>Всички отзиви ({{ reviews|length }})</h3>
+    {% if reviews %}
+        {% for review in reviews %}
+        <div class="review-card" id="review-{{ review.id }}">
+            <div class="review-header">
+                <div>
+                    <div class="review-author">{{ review.user_email }}</div>
+                    <div class="review-stars">
+                        {% for i in range(5) %}
+                            {% if i < review.rating %}★{% else %}☆{% endif %}
+                        {% endfor %}
+                        <span style="margin-left: 10px; color: #7f8c8d;">{{ review.rating }}/5</span>
+                    </div>
+                </div>
+                <div class="review-date">{{ review.created_at }}</div>
+            </div>
+
+            <p>{{ review.comment }}</p>
+
+            <!-- Reply Button -->
+            {% if session.user_id %}
+            <div class="review-actions">
+                <button class="reply-btn" onclick="toggleReplyForm({{ review.id }})">
+                    💬 Отговори
+                </button>
+                {% if session.user_id == review.user_id or session.is_admin %}
+                <form action="{{ url_for('product.delete_review', product_id=product.id, review_id=review.id) }}" method="POST" style="display: inline;">
+                    <button type="submit" class="reply-btn" onclick="return confirm('Сигурни ли сте, че искате да изтриете този отзив?')" style="color: #e74c3c;">
+                        🗑️ Изтрий
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Reply Form -->
+            {% if session.user_id %}
+            <div class="reply-form" id="reply-form-{{ review.id }}">
+                <form action="{{ url_for('product.add_reply', product_id=product.id, review_id=review.id) }}" method="POST">
+                    <textarea name="reply_text" placeholder="Напиши отговор на този коментар..." required></textarea>
+                    <button type="submit" class="add-to-cart-btn" style="padding: 10px 20px; font-size: 14px;">📤 Публикувай отговор</button>
+                    <button type="button" class="reply-btn" onclick="toggleReplyForm({{ review.id }})" style="background: #95a5a6; color: white; padding: 10px 20px; border-radius: 5px;">Откажи</button>
+                </form>
+            </div>
+            {% endif %}
+
+            <!-- Replies Display -->
+            {% if review.replies %}
+            <div class="replies-section">
+                <h4>Отговори ({{ review.replies|length }})</h4>
+                {% for reply in review.replies %}
+                <div class="reply-card">
+                    <div class="reply-header">
+                        <div class="reply-author">{{ reply.user_email }}</div>
+                        <div class="reply-date">{{ reply.created_at }}</div>
+                    </div>
+                    <p>{{ reply.comment }}</p>
+                    {% if session.user_id == reply.user_id or session.is_admin %}
+                    <form action="{{ url_for('product.delete_reply', product_id=product.id, reply_id=reply.id) }}" method="POST" style="margin-top: 10px;">
+                        <button type="submit" class="reply-btn" onclick="return confirm('Сигурни ли сте, че искате да изтриете този отговор?')" style="color: #e74c3c; font-size: 12px;">
+                            🗑️ Изтрий отговор
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px;">
+            <h3 style="color: #7f8c8d;">📝 Все още няма отзиви</h3>
+            <p style="color: #95a5a6;">Бъдете първият, който ще сподели мнение за този продукт!</p>
+        </div>
+    {% endif %}
+</div>
+
+    <script>
+        // Star rating interaction
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('ratingInput');
+
+        // Set initial rating
+        const initialRating = parseInt(ratingInput.value) || 5;
+        updateStars(initialRating);
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-rating');
+                ratingInput.value = rating;
+                updateStars(rating);
+            });
+
+            star.addEventListener('mouseenter', function() {
+                const rating = this.getAttribute('data-rating');
+                updateStars(rating);
+            });
+        });
+
+        document.getElementById('starRating').addEventListener('mouseleave', function() {
+            const currentRating = ratingInput.value;
+            updateStars(currentRating);
+        });
+
+        function updateStars(rating) {
+            stars.forEach(star => {
+                if (star.getAttribute('data-rating') <= rating) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+
+        // Reply form toggle
+        function toggleReplyForm(reviewId) {
+            const form = document.getElementById('reply-form-' + reviewId);
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        }
+
+        // Auto-expand textareas
+        document.addEventListener('input', function(e) {
+            if (e.target.tagName.toLowerCase() === 'textarea') {
+                e.target.style.height = 'auto';
+                e.target.style.height = (e.target.scrollHeight) + 'px';
+            }
+        });
+    </script>
+</body>
+</html>

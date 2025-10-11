@@ -1,14 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Редактирай продукт</h2>
-<form method="post">
-    <label>Име</label><br><input name="name" value="{{ product.name }}"><br>
-    <label>Описание</label><br><textarea name="description">{{ product.description }}</textarea><br>
-    <label>Цвят</label><br><input name="color" value="{{ product.color }}"><br>
-    <label>Размери (разделени с запетаи)</label><br><input name="sizes" value="{{ product.sizes|join(',') }}"><br>
-    <label>Цена</label><br><input name="price" value="{{ product.price }}" type="number" step="0.01"><br>
-    <label>Наличност</label><br><input name="stock" value="{{ product.stock }}" type="number"><br>
-    <label>Снимка (URL)</label><br><input name="image_url" value="{{ product.image_url }}"><br>
-    <button type="submit">Запази</button>
-</form>
+<div class="admin-form-container">
+  <h2>Редактирай продукт</h2>
+  <form method="post" class="admin-form">
+    <label>Име</label>
+    <input type="text" name="name" value="{{ product.name }}" required>
+
+    <label>Описание</label>
+    <textarea name="description">{{ product.description }}</textarea>
+
+    <label>Цвят</label>
+    <input type="text" name="color" value="{{ product.color }}">
+
+    <label>Размери (разделени с запетаи)</label>
+    <input type="text" name="sizes" value="{{ product.sizes|join(',') }}">
+
+    <label>Цена</label>
+    <input type="number" name="price" value="{{ product.price }}" step="0.01" required>
+
+    <label>Наличност</label>
+    <input type="number" name="stock" value="{{ product.stock }}">
+
+    <label>Снимка (URL)</label>
+    <input type="text" name="image_url" value="{{ product.image_url }}">
+
+    <button type="submit" class="btn">Запази промените</button>
+  </form>
+
+  <div class="back-link-container">
+    <a href="{{ url_for('admin.products') }}" class="btn btn-secondary">← Назад към продуктите</a>
+  </div>
+</div>
 {% endblock %}

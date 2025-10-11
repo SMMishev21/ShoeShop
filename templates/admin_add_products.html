@@ -1,14 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Добави продукт</h2>
-<form method="post">
-    <label>Име</label><br><input name="name" required><br>
-    <label>Описание</label><br><textarea name="description"></textarea><br>
-    <label>Цвят</label><br><input name="color"><br>
-    <label>Размери (разделени с запетаи, напр. 40,41,42)</label><br><input name="sizes"><br>
-    <label>Цена</label><br><input name="price" type="number" step="0.01"><br>
-    <label>Наличност</label><br><input name="stock" type="number" value="0"><br>
-    <label>Снимка (URL)</label><br><input name="image_url" type="text"><br>
-    <button type="submit">Добави</button>
-</form>
+<div class="admin-form-container">
+  <h2>Добави продукт</h2>
+  <form method="post" class="admin-form">
+    <label>Име</label>
+    <input type="text" name="name" required>
+
+    <label>Описание</label>
+    <textarea name="description"></textarea>
+
+    <label>Цвят</label>
+    <input type="text" name="color">
+
+    <label>Размери (разделени с запетаи, напр. 40,41,42)</label>
+    <input type="text" name="sizes">
+
+    <label>Цена</label>
+    <input type="number" name="price" step="0.01" required>
+
+    <label>Наличност</label>
+    <input type="number" name="stock" value="0">
+
+    <label>Снимка (URL)</label>
+    <input type="text" name="image_url">
+
+    <button type="submit" class="btn">Добави продукт</button>
+  </form>
+
+  <div class="back-link-container">
+    <a href="{{ url_for('admin.products') }}" class="btn btn-secondary">← Назад към продуктите</a>
+  </div>
+</div>
 {% endblock %}

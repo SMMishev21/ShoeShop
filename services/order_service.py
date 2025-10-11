@@ -10,12 +10,19 @@ def create_order(user_id, items, address, payment):
         if not product or product.stock < item["qty"]:
             raise Exception(f"Няма достатъчно наличност за продукт {item['product_id']}")
 
+    # Calculate total
+    total = 0
+    for item in items:
+        product = Product.query.get(item["product_id"])
+        total += product.price * item["qty"]
+
     # Create order
     new_order = Order(
         user_id=user_id,
         address=address,
         payment=payment,
-        status='new'
+        status='new',
+        total_price=total
     )
 
     db.session.add(new_order)
@@ -25,12 +32,14 @@ def create_order(user_id, items, address, payment):
     for item in items:
         product = Product.query.get(item["product_id"])
 
-        # Create order item
+        # Create order item with product details
         order_item = OrderItem(
             order_id=new_order.id,
             product_id=item["product_id"],
+            product_name=product.name,  # Store name
+            product_description=product.description,  # Store description
             qty=item["qty"],
-            price=product.price  # Store current price
+            price=product.price
         )
         db.session.add(order_item)
 
@@ -45,9 +54,17 @@ def create_order(user_id, items, address, payment):
 
 def get_orders_by_user(user_id):
     """Get all orders for a specific user"""
+    from models import Order, OrderItem
     orders = Order.query.filter_by(user_id=user_id).order_by(Order.created_at.desc()).all()
-    return [order.to_dict() for order in orders]
 
+    orders_data = []
+    for order in orders:
+        order_dict = order.to_dict()
+        # Ensure items are properly loaded
+        order_dict['items'] = [item.to_dict() for item in order.items]
+        orders_data.append(order_dict)
+
+    return orders_data
 
 def get_order_by_id(order_id):
     """Get a specific order by ID"""
