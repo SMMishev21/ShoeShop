@@ -6,6 +6,11 @@ from controllers.admin_controller import admin_bp
 from controllers.product_controller import product_bp
 from controllers.profile_controller import profile_bp
 from database import init_db
+from controllers.promotion_controller import promotion_bp
+
+
+
+
 
 
 def create_app():
@@ -25,6 +30,9 @@ def create_app():
     app.register_blueprint(admin_bp)
     app.register_blueprint(product_bp)
     app.register_blueprint(profile_bp)
+
+    # Add with other blueprint registrations
+    app.register_blueprint(promotion_bp)
 
     @app.route("/")
     def index():

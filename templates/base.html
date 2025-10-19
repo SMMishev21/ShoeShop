@@ -9,20 +9,23 @@
   <header>
     <h1><a href="{{ url_for('index') }}">ShoeStore</a></h1>
     <nav>
-      <a href="{{ url_for('catalog.catalog') }}">Каталог</a>
-      <a href="{{ url_for('cart.cart') }}">Кошница</a>
-      {% if session.get('user_id') %}
-        <a href="{{ url_for('profile.profile') }}">Профил</a>
-        <a href="{{ url_for('auth.logout') }}">Изход</a>
-        {% if session.get('is_admin') %}
-          <a href="{{ url_for('admin.products') }}">Admin</a>
+        <a href="{{ url_for('catalog.catalog') }}">Каталог</a>
+        <a href="{{ url_for('cart.cart') }}">Кошница</a>
+        <a href="{{ url_for('promotion.promotions_calendar') }}">🎁 Промоции</a>
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('profile.profile') }}">Профил</a>
+            <a href="{{ url_for('auth.logout') }}">Изход</a>
+            {% if session.get('is_admin') %}
+                <a href="{{ url_for('admin.products') }}">📦 Продукти</a>
+                <a href="{{ url_for('promotion.admin_promotions') }}">🎪 Промоции</a>
+                <a href="{{ url_for('admin.profile_approvals') }}">🖼️ Одобрения</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Вход</a>
+            <a href="{{ url_for('auth.register') }}">Регистрация</a>
         {% endif %}
-      {% else %}
-        <a href="{{ url_for('auth.login') }}">Вход</a>
-        <a href="{{ url_for('auth.register') }}">Регистрация</a>
-      {% endif %}
     </nav>
-  </header>
+</header>
 
   <main>
     {% with messages = get_flashed_messages(with_categories=true) %}

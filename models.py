@@ -182,3 +182,44 @@ class ReviewReply(db.Model):
             "comment": self.comment,
             "created_at": self.created_at.strftime("%d.%m.%Y %H:%M")
         }
+
+
+# Add to your existing models.py
+class Promotion(db.Model):
+    __tablename__ = 'promotions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    start_date = db.Column(db.DateTime, nullable=False)
+    end_date = db.Column(db.DateTime, nullable=False)
+    discount_percent = db.Column(db.Float)
+    promo_code = db.Column(db.String(50), unique=True)
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship with products (many-to-many)
+    products = db.relationship('Product', secondary='promotion_products', backref='promotions')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "start_date": self.start_date.strftime("%Y-%m-%d %H:%M"),
+            "end_date": self.end_date.strftime("%Y-%m-%d %H:%M"),
+            "discount_percent": self.discount_percent,
+            "promo_code": self.promo_code,
+            "is_active": self.is_active,
+            "products": [p.to_dict() for p in self.products] if self.products else []
+        }
+
+
+
+# Association table for promotion-products many-to-many relationship
+class PromotionProduct(db.Model):
+    __tablename__ = 'promotion_products'
+
+    id = db.Column(db.Integer, primary_key=True)
+    promotion_id = db.Column(db.Integer, db.ForeignKey('promotions.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)

@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-form-container">
+    <h1>✏️ Редактирай промоция</h1>
+    
+    <form method="post" class="admin-form">
+        <div class="form-group">
+            <label for="title">Заглавие на промоцията *</label>
+            <input type="text" id="title" name="title" value="{{ promotion.title }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Описание</label>
+            <textarea id="description" name="description" rows="4">{{ promotion.description }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="start_date">Начална дата и час</label>
+                <input type="datetime-local" id="start_date" name="start_date" 
+                       value="{{ promotion.start_date.replace(' ', 'T') }}">
+                <small>Текуща: {{ promotion.start_date }}</small>
+            </div>
+
+            <div class="form-group">
+                <label for="end_date">Крайна дата и час</label>
+                <input type="datetime-local" id="end_date" name="end_date" 
+                       value="{{ promotion.end_date.replace(' ', 'T') }}">
+                <small>Текуща: {{ promotion.end_date }}</small>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="discount_percent">Процент отстъпка *</label>
+                <input type="number" id="discount_percent" name="discount_percent" 
+                       value="{{ promotion.discount_percent }}" min="1" max="100" step="1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Статус</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="is_active" name="is_active" 
+                           {{ 'checked' if promotion.is_active }}>
+                    <label for="is_active">Активна промоция</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Промо код</label>
+            <div class="promo-code-display">
+                <code class="code-large">{{ promotion.promo_code }}</code>
+                <small>Промо кодът не може да се променя</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Избери продукти за промоцията</label>
+            <div class="products-grid">
+                {% for product in products %}
+                <div class="product-checkbox">
+                    <input type="checkbox" id="product_{{ product.id }}" 
+                           name="product_ids" value="{{ product.id }}"
+                           {{ 'checked' if product.id in promotion.products|map(attribute='id') }}>
+                    <label for="product_{{ product.id }}">
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}" 
+                             onerror="this.src='https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=100&q=80'">
+                        <div class="product-info">
+                            <strong>{{ product.name }}</strong>
+                            <span class="price">{{ product.price }} лв</span>
+                        </div>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Promotion Preview -->
+        <div class="preview-section">
+            <h3>🔍 Преглед на промоцията</h3>
+            <div class="promotion-preview">
+                <div class="promotion-badge">-{{ promotion.discount_percent|round|int }}%</div>
+                <h4>{{ promotion.title }}</h4>
+                <p>{{ promotion.description or 'Без описание' }}</p>
+                <div class="preview-dates">
+                    <span>📅 От: {{ promotion.start_date }}</span>
+                    <span>📅 До: {{ promotion.end_date }}</span>
+                </div>
+                <div class="preview-products">
+                    <strong>Продукти ({{ promotion.products|length }}):</strong>
+                    {% for product in promotion.products[:3] %}
+                    <span class="product-tag">{{ product.name }}</span>
+                    {% endfor %}
+                    {% if promotion.products|length > 3 %}
+                    <span class="product-tag">... и още {{ promotion.products|length - 3 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">💾 Запази промените</button>
+            <a href="{{ url_for('promotion.admin_promotions') }}" class="btn btn-secondary">❌ Откажи</a>
+            <a href="{{ url_for('promotion.delete_promotion', promotion_id=promotion.id) }}" 
+               class="btn-delete"
+               onclick="return confirm('Сигурни ли сте, че искате да изтриете промоцията \"{{ promotion.title }}\"?')">
+               🗑️ Изтрий промоцията
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+.promo-code-display {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px dashed #dee2e6;
+}
+
+.code-large {
+    background: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 1.3rem;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.preview-section {
+    margin: 30px 0;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #3498db;
+}
+
+.promotion-preview {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.promotion-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #e74c3c;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.preview-dates {
+    margin: 15px 0;
+}
+
+.preview-dates span {
+    display: block;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.preview-products {
+    margin-top: 15px;
+}
+
+.product-tag {
+    display: inline-block;
+    background: #ecf0f1;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin: 2px;
+    font-size: 0.8rem;
+    color: #2c3e50;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Date validation
+    const startDateInput = document.getElementById('start_date');
+    const endDateInput = document.getElementById('end_date');
+    
+    startDateInput.addEventListener('change', validateDates);
+    endDateInput.addEventListener('change', validateDates);
+
+    function validateDates() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        
+        if (startDate && endDate && startDate >= endDate) {
+            alert('Крайната дата трябва да е след началната дата!');
+            endDateInput.value = '';
+        }
+    }
+
+    // Real-time preview update
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const discountInput = document.getElementById('discount_percent');
+
+    function updatePreview() {
+        document.querySelector('.promotion-preview h4').textContent = titleInput.value || '{{ promotion.title }}';
+        document.querySelector('.promotion-preview p').textContent = descInput.value || 'Без описание';
+        document.querySelector('.promotion-badge').textContent = `-${discountInput.value || {{ promotion.discount_percent }}|round|int}%`;
+    }
+
+    titleInput.addEventListener('input', updatePreview);
+    descInput.addEventListener('input', updatePreview);
+    discountInput.addEventListener('input', updatePreview);
+});
+</script>
+{% endblock %}

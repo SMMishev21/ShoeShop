@@ -696,3 +696,55 @@ body {
         gap: 5px;
     }
 }
+
+/* Admin Dropdown Styles */
+.admin-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.admin-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.admin-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 200px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.admin-menu a {
+    display: block;
+    padding: 12px 20px;
+    color: #2c3e50;
+    text-decoration: none;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.admin-menu a:hover {
+    background: #667eea;
+    color: white;
+}
+
+.admin-menu a:last-child {
+    border-bottom: none;
+}
+
+.admin-dropdown:hover .admin-menu {
+    display: block;
+}
+
+/* Make sure the admin toggle stands out */
+.admin-toggle {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%) !important;
+}

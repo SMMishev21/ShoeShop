@@ -4,9 +4,10 @@
   <h2>Admin: Управление на продукти</h2>
 
   <div class="admin-actions">
-    <a href="{{ url_for('admin.add_product') }}" class="btn">➕ Добави нов продукт</a>
-    <a href="{{ url_for('admin.profile_approvals') }}" class="btn">👥 Одобрения на снимки</a>
-  </div>
+    <a href="{{ url_for('admin.add_product') }}" class="btn">➕ Добави продукт</a>
+    <a href="{{ url_for('promotion.admin_promotions') }}" class="btn" style="background: #9b59b6;">🎪 Управление на промоции</a>
+    <a href="{{ url_for('admin.profile_approvals') }}" class="btn" style="background: #e67e22;">🖼️ Одобрения на снимки</a>
+</div>
 
   <div class="table-container">
     <table>

@@ -1,8 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-db = SQLAlchemy()
+# REMOVE THIS LINE: from models import Promotion
 
+db = SQLAlchemy()
 
 def init_db(app):
     """Initialize database with Flask app"""
@@ -15,10 +16,10 @@ def init_db(app):
         db.create_all()
         seed_data()
 
-
 def seed_data():
     """Seed initial data if database is empty"""
-    from models import User, Product
+    # Import models HERE to avoid circular imports
+    from models import User, Product, Promotion, PromotionProduct
 
     # Check if data already exists
     if User.query.first() is not None:
@@ -110,6 +111,32 @@ def seed_data():
     for pd in products_data:
         product = Product(**pd)
         db.session.add(product)
+
+    # Add sample promotions - FIXED INDENTATION
+    from datetime import timedelta
+
+    promotions = [
+        {
+            "title": "Лятна Разпродажба",
+            "description": "Специални летни оферти за обувки",
+            "start_date": datetime.now() - timedelta(days=1),
+            "end_date": datetime.now() + timedelta(days=30),
+            "discount_percent": 20.0,
+            "promo_code": "SUMMER20"
+        },
+        {
+            "title": "Студена Оферта",
+            "description": "Подготви се за зимата с нашите зимни обувки",
+            "start_date": datetime.now() + timedelta(days=5),
+            "end_date": datetime.now() + timedelta(days=60),
+            "discount_percent": 15.0,
+            "promo_code": "WINTER15"
+        }
+    ]
+
+    for promo_data in promotions:
+        promotion = Promotion(**promo_data)
+        db.session.add(promotion)
 
     db.session.commit()
     print("Database seeded successfully!")

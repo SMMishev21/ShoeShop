@@ -38,7 +38,7 @@ def add_product():
         flash("Продуктът е добавен.", "success")
         return redirect(url_for("admin.products"))
 
-    return render_template("admin_add_product.html")
+    return render_template("admin_add_products.html")
 
 
 @admin_bp.route("/admin/edit_product/<int:product_id>", methods=["GET", "POST"])
